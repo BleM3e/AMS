@@ -1,0 +1,10 @@
+/.vscode
+/delayloop_mesure
+/file
+/recv
+/recv_old.c
+/result.txt
+/send
+/send_old.c
+/sharedmemfile
+/timing.txt
