@@ -72,12 +72,12 @@ double calc_error(const int *received_bits, const int *expected_bits, int bit_co
 L'en-tête **```util.h```** contient des constantes et des fonctions partagées par les deux programmes :
 
 + **```DELAYLOOP_VALUE```** : Constante pour contrôler la durée d'attente entre chaque mesure.
-+ **```DELAY_PER_BIT```** : Constante pour contrôler la durée entre les transmissions de bits.
-+ **```SYNC_CYCLES_INIT```** : Constante pour contrôler la durée initiale de synchronisation.
-+ **```SYNC_CYCLES_LOOP```** : Constante pour contrôler la durée de synchronisation pour chaque itération de la boucle.
++ **```DELAY_FOR_EACH_BIT```** : Constante pour contrôler la durée entre les transmissions de bits.
++ **```CACHE_SYNC_INIT```** : Constante pour contrôler la durée initiale de synchronisation.
++ **```CACHE_SYNC_LOOP```** : Constante pour contrôler la durée de synchronisation pour chaque itération de la boucle.
 + **```synchronisation```** : Prototype de la fonction de synchronisation pour aligner les opérations entre les programmes **```send.c```** et **```recv.c```**.
 
-Les constantes **```SYNC_CYCLES_INIT```** et **```SYNC_CYCLES_LOOP```** représentent un bit sur 8 octets à considérer pour synchroniser l'initialisation et la boucle de transmission des données, respectivement.
+Les constantes **```CACHE_SYNC_INIT```** et **```CACHE_SYNC_LOOP```** représentent un bit sur 8 octets à considérer pour synchroniser l'initialisation et la boucle de transmission des données, respectivement.
 Ces valeurs sont utilisées pour déterminer le nombre de cycles d'horloge pendant lesquels les programmes attendent avant d'envoyer ou de recevoir un bit, assurant ainsi une synchronisation précise entre les deux parties.
 
 Voici a quoi ressemble notre fichier d'en-tête **```util.h```** :
@@ -85,14 +85,14 @@ Voici a quoi ressemble notre fichier d'en-tête **```util.h```** :
 //DELAYLOOP_VALUE : durée d'attente entre les mesures
 #define DELAYLOOP_VALUE 3500
 
-//DELAY_PER_BIT : durée entre les transmissions de bits
-#define DELAY_PER_BIT 600000
+//DELAY_FOR_EACH_BIT : durée entre les transmissions de bits
+#define DELAY_FOR_EACH_BIT 600000
 
-// SYNC_CYCLES_INIT : durée initiale de synchronisation
-#define SYNC_CYCLES_INIT 36
+// CACHE_SYNC_INIT : durée initiale de synchronisation
+#define CACHE_SYNC_INIT 36
 
-// SYNC_CYCLES_LOOP : durée de synchronisation pour chaque itération
-#define SYNC_CYCLES_LOOP 18
+// CACHE_SYNC_LOOP : durée de synchronisation pour chaque itération
+#define CACHE_SYNC_LOOP 18
 ```
 
 ---

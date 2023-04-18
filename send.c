@@ -72,20 +72,20 @@ int main(void)
         double elapsed;
 
         clflush(cache_address);
-        synchronisation(SYNC_CYCLES_INIT);
+        synchronisation(CACHE_SYNC_INIT);
         start = clock();
 
         // Envoi du message bit par bit
         for (i = 0; i < (message_length * 8); i++)
         {
-            synchronisation(SYNC_CYCLES_LOOP);
+            synchronisation(CACHE_SYNC_LOOP);
             uint64_t time = rdtscp64();
 
             if (binary_output[i])
-                while (rdtscp64() - time < DELAY_PER_BIT)
+                while (rdtscp64() - time < DELAY_FOR_EACH_BIT)
                     memaccess(cache_address);
             else
-                while (rdtscp64() - time < DELAY_PER_BIT)
+                while (rdtscp64() - time < DELAY_FOR_EACH_BIT)
                     clflush(cache_address);
         }
         end = clock();

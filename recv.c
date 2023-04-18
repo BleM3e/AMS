@@ -129,14 +129,14 @@ int main()
     clflush(cache_address);
 
     // Synchronisation avec le cache pour garantir la bonne réception des bits
-    synchronisation(SYNC_CYCLES_INIT);
+    synchronisation(CACHE_SYNC_INIT);
 
     // Lancement de la réception des bits du message
     start = clock();
     for (i = 0; i < (message_length * 8); i++)
     {
         // Synchronisation avec le cache avant la lecture de chaque bit
-        synchronisation(SYNC_CYCLES_LOOP);
+        synchronisation(CACHE_SYNC_LOOP);
 
         // Lecture du temps d'accès à l'adresse mémoire mappée pour chaque bit
         uint64_t time = rdtscp64();
@@ -153,7 +153,7 @@ int main()
             // Attente d'un délai pour garantir la bonne réception des bits
             delayloop(DELAYLOOP_VALUE);
 
-        } while (rdtscp64() - time < DELAY_PER_BIT);
+        } while (rdtscp64() - time < DELAY_FOR_EACH_BIT);
 
         // Conversion du temps d'accès en un bit 0 ou 1
         received_timing[i] = (double)somme / nb_val;
