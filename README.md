@@ -7,9 +7,15 @@ Ce projet consiste en deux programmes, **```send.c```** et **```recv.c```**, qui
 
 Dans le cadre de ce projet, nous avons développé deux programmes, **```send.c```** et **```recv.c```**, qui communiquent entre eux et transmettent des données à travers le cache du processeur.
 
-L'objectif principal de ce travail étant d'atteindre un ***taux d'erreur*** très faible dans la transmission des données, tout en maintenant une bonne ***vitesse*** d'execution des deux programmes.
+L'objectif principal de ce travail est d'atteindre un ***taux d'erreur*** très faible dans la transmission des données, tout en maintenant une bonne ***vitesse*** d'execution des deux programmes.
 
 Ce compte rendu présente les détails techniques de nos programmes, les ajustements effectués pour optimiser leur performance, ainsi que les paramètres clés qui ont été utilisés pour atteindre ces résultats impressionnants.
+
+## Contexte
+
+Les canaux dissimulés sont des moyens de communication qui permettent de transmettre des informations en exploitant des ressources partagées, telles que le cache du processeur, de manière non intentionnelle et non détectable.
+
+Ils sont souvent utilisés pour contourner la sécurité ou les mécanismes de protection des données, et peuvent servir à des fins malveillantes ou pour protéger la confidentialité des communications.
 
 ---
 
@@ -35,7 +41,7 @@ Le programme **```recv.c```** est responsable de la réception des données. Il 
 + **```binary_to_message```** : Convertit une représentation binaire en un message texte.
 + **```calc_error```** : Calcule le taux d'erreur en comparant les bits reçus avec les bits attendus.
 + **```write_to_file```** : Ecrit les cycles enregistrés par la fonction ```memaccesstime``` dans un fichier *result.txt* afin de les visualiser via le programme python ```visualization.py```.
-+ **```calc_true_capacity```** : Calcul la capacité réelle du programme via la méthode de communication par canaux cachés.s
++ **```calc_true_capacity```** : Calcule la capacité réelle du programme via la méthode de communication par canaux cachés.
 + **```main```** : Écoute le canal dissimulé, reçoit les bits, les convertit en texte, puis affiche le message reçu et le taux d'erreur.
 + **```synchronisation```** : Fonction de synchronisation pour aligner les opérations entre les programmes **```send.c```** et **```recv.c```** (comme dans **```send.c```**).
 
@@ -87,7 +93,6 @@ Voici a quoi ressemble notre fichier d'en-tête **```util.h```** :
 
 // SYNC_CYCLES_LOOP : durée de synchronisation pour chaque itération
 #define SYNC_CYCLES_LOOP 18
-
 ```
 
 ---
@@ -115,7 +120,7 @@ Capacité réelle (T) : 4040.245589 bits/s
 0.7769 secondes entre start et end.
 ```
 
-Avec les paramètres actuels, nous obtenons des résultats satisfaisant pour la transmission de données à travers le canal dissimulé. Le taux d'erreur est très faible, atteignant moins de 0,1 % lorsque les programmes sont bien synchronisés.
+Avec les paramètres actuels, nous obtenons des résultats satisfaisant pour la transmission de données à travers le canal dissimulé. Le taux d'erreur est très faible, atteignant moins de 0,1 % lorsque les programmes sont correctement synchronisés.
 
 Cependant, il est toujours possible d'explorer différentes approches pour améliorer encore les performances des programmes. Voici quelques suggestions pour continuer à optimiser les performances et réduire le taux d'erreur :
 
@@ -127,4 +132,16 @@ En résumé, notre projet de transmission de données à travers un canal dissim
 
 Les ajustements apportés aux paramètres et aux fonctions de synchronisation ont joué un rôle crucial dans l'amélioration des performances des programmes.
 
-Il est essentiel de continuer à explorer différentes approches et d'ajuster les paramètres pour maintenir et améliorer encore les performances de ces programmes afin qu'il puisse supporter des messages beaucoup plus long avec une précision et une vitesse d'exécution tout aussi impressionante.
+Il était essentiel de continuer à explorer différentes approches et d'ajuster les paramètres pour maintenir et améliorer encore les performances de ces programmes afin qu'ils puissent supporter des messages beaucoup plus long avec une précision et une vitesse d'exécution tout aussi impressionantes.
+
+---
+
+## Défis et limitations
+
+Durant le développement et les tests de nos programmes, nous avons rencontré plusieurs défis et limitations :
+
+1. **Synchronisation** : Assurer une synchronisation précise entre les deux programmes a été un défi majeur. Nous avons dû ajuster les constantes de synchronisation pour trouver un équilibre entre la vitesse de transmission et la fiabilité. Nous avons également essayé différentes méthodes, comme la synchronisation par fichier externe.
+2. **Interférences** : Les autres processus en cours d'exécution sur la machine peuvent interférer avec la transmission des données, ce qui peut entraîner des erreurs ou une mauvaise synchronisation. Pour minimiser ces interférences, nous avons exécuté les programmes avec la priorité la plus élevée possible. Cependant, ayant d'abord travaillé sur mon ordinateur personnel et des machines virtuelles Linux, il y avait beaucoup d'interférences que l'on retrouve beaucoup moins lorsque l'on utilise un véritable environnement Linux.
+3. **Paramètres optimaux** : Trouver les paramètres optimaux pour un équilibre entre la vitesse de transmission et la fiabilité est un défi. Les tests et les ajustements sont nécessaires pour trouver les meilleures valeurs pour les constantes définies dans `util.h`.
+
+Malgré ces défis, nous avons réussi à développer des programmes performants et à atteindre un taux d'erreur très faible dans la transmission des données.

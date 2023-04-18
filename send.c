@@ -8,6 +8,7 @@
 
 #include "util.h"
 
+// Convertit un message en représentation binaire
 void message_to_binary(const char *message, int *binary_output, int message_length)
 {
     for (int i = 0; i < message_length; i++)
@@ -21,6 +22,7 @@ void message_to_binary(const char *message, int *binary_output, int message_leng
     }
 }
 
+// Lit le contenu d'un fichier et retourne un pointeur vers le contenu
 char *read_file_content(const char *filename)
 {
     FILE *file = fopen(filename, "r");
@@ -66,9 +68,6 @@ int main(void)
         cache_address = map_offset("file", 0);
         int i;
 
-        // FILE *temp_file = fopen("temp_file.txt", "w");
-        // fclose(temp_file);
-
         clock_t start, end;
         double elapsed;
 
@@ -76,6 +75,7 @@ int main(void)
         synchronisation(SYNC_CYCLES_INIT);
         start = clock();
 
+        // Envoi du message bit par bit
         for (i = 0; i < (message_length * 8); i++)
         {
             synchronisation(SYNC_CYCLES_LOOP);
@@ -89,11 +89,9 @@ int main(void)
                     clflush(cache_address);
         }
         end = clock();
-        elapsed = ((double)(end - start)) / CLOCKS_PER_SEC; /* Conversion en secondes  */
+        elapsed = ((double)(end - start)) / CLOCKS_PER_SEC; // Conversion en secondes
 
         printf("%.4f secondes entre start et end.\n", elapsed);
-
-        // remove("temp_file.txt");
 
         free(binary_output);
         free(file_content);
@@ -101,6 +99,7 @@ int main(void)
     return 0;
 }
 
+// Synchronisation des horloges
 void synchronisation(int N)
 {
     while ((rdtscp64() & ((1LL << N) - 1)) > 1000)
