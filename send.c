@@ -4,6 +4,7 @@
 #include <mastik/low.h>
 #include <mastik/util.h>
 #include <string.h>
+#include <time.h>
 
 #include "util.h"
 
@@ -73,11 +74,15 @@ int main(void)
         cache_address = map_offset("file", 64);
         int i;
 
-        FILE *temp_file = fopen("temp_file.txt", "w");
-        fclose(temp_file);
+        // FILE *temp_file = fopen("temp_file.txt", "w");
+        // fclose(temp_file);
+
+        clock_t start, end;
+        double elapsed;
 
         clflush(cache_address);
         synchronisation(SYNC_CYCLES_INIT);
+        start = clock();
 
         for (i = 0; i < (message_length * 8); i++)
         {
@@ -91,8 +96,12 @@ int main(void)
                 while (rdtscp64() - time < DELAY_PER_BIT)
                     clflush(cache_address);
         }
+        end = clock();
+        elapsed = ((double)(end - start)) / CLOCKS_PER_SEC; /* Conversion en secondes  */
 
-        remove("temp_file.txt");
+        printf("%.4f secondes entre start et end.\n", elapsed);
+
+        // remove("temp_file.txt");
 
         free(binary_output);
         free(file_content);

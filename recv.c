@@ -4,6 +4,7 @@
 #include <mastik/low.h>
 #include <mastik/util.h>
 #include <string.h>
+#include <time.h>
 
 #include "util.h"
 
@@ -76,6 +77,16 @@ double calc_error(const int *received_bits, const int *expected_bits, int bit_co
     return ((double)error_count / bit_count) * 100;
 }
 
+void write_to_file(int *timing_input, int message_length)
+{
+    FILE *f = fopen("result.txt", "w");
+    for (int i = 0; i < message_length; i++)
+    {
+        fprintf(f,"%d\n",timing_input[i]);
+    }
+    fclose(f);
+}
+
 int main()
 {
     const char *filename = "message.txt";
@@ -85,6 +96,7 @@ int main()
 
     int message_length = strlen(file_content);
     int *received_binary = (int *)malloc(message_length * 8 * sizeof(int));
+    int *received_timing = (int *)malloc(message_length * 8 * sizeof(int));
 
     char *cache_address;
     cache_address = map_offset("file", 64);
@@ -92,15 +104,17 @@ int main()
     uint32_t time_mesured;
     int i, somme, nb_val;
 
-    printf("Pret à recevoir le message\n");
+    // while (access("temp_file.txt", F_OK) == -1)
+    // {
+    //     usleep(1000); // Attendre 1 ms
+    // }
 
-    while (access("temp_file.txt", F_OK) == -1)
-    {
-        usleep(1000); // Attendre 1 ms
-    }
+    clock_t start, end;
+    double elapsed;
 
     clflush(cache_address);
     synchronisation(SYNC_CYCLES_INIT);
+    start = clock();
     for (i = 0; i < (message_length * 8); i++)
     {
         synchronisation(SYNC_CYCLES_LOOP);
@@ -112,24 +126,31 @@ int main()
         {
             time_mesured = memaccesstime(cache_address);
             clflush(cache_address);
-            somme += (time_mesured < L3_THRESHOLD);
+            somme += time_mesured;
             nb_val++;
             delayloop(DELAYLOOP_VALUE);
         } while (rdtscp64() - time < DELAY_PER_BIT);
-
-        received_binary[i] = ((float)somme / nb_val) > 0.5;
+        received_timing[i] = (double)somme / nb_val;
+        received_binary[i] = ((double)somme / nb_val) < L3_THRESHOLD;
     }
+    end = clock();
+    elapsed = ((double)(end - start)) / CLOCKS_PER_SEC; /* Conversion en secondes  */
+
+    
 
     char *received_message = (char *)malloc(message_length + 1);
     binary_to_message(received_binary, received_message, message_length);
+    write_to_file(received_timing, message_length * 8);
 
     int *message_binary = (int *)malloc(message_length * 8 * sizeof(int));
     message_to_binary(file_content, message_binary, message_length);
     double perc_error = calc_error(received_binary, message_binary, message_length * 8);
 
     printf("Message reçu: %s\n\n\nTaux d'erreur : %f\n", received_message, perc_error);
+    printf("%.4f secondes entre start et end.\n", elapsed);
 
     free(message_binary);
+    free(received_timing);
     free(received_message);
     free(received_binary);
 
