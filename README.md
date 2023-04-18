@@ -41,6 +41,24 @@ Le programme **```recv.c```** est responsable de la réception des données. Il 
 
 Nous avons aussi besoin du message ici afin de pouvoir avoir la longueur du message qui est nécessaire au long du programme, mais aussi pour pouvoir comparer le message reçu avec l'original afin de relever le taux d'erreur dans la réception.
 
+Voici ci dessous la fonction de calcul du taux d'erreur dans le programme **```recv.c```**, la méthode utilisé est identique à celle vu en cours, hormis que les valeurs ***br***, le nombre de bit reçu, et ***bs***, le nombre de bit envoyé, n'y apparaissent pas car ceux-là sont égaux içi.
+
+```c
+// Extrait de recv.c
+double calc_error(const int *received_bits, const int *expected_bits, int bit_count)
+{
+    int error_count = 0;
+    for (int i = 0; i < bit_count; i++)
+    {
+        if (received_bits[i] != expected_bits[i])
+        {
+            error_count++;
+        }
+    }
+    return ((double)error_count / bit_count) * 100;
+}
+```
+
 ---
 
 ## util.h
@@ -55,10 +73,6 @@ L'en-tête **```util.h```** contient des constantes et des fonctions partagées 
 
 Les constantes **```SYNC_CYCLES_INIT```** et **```SYNC_CYCLES_LOOP```** représentent un bit sur 8 octets à considérer pour synchroniser l'initialisation et la boucle de transmission des données, respectivement.
 Ces valeurs sont utilisées pour déterminer le nombre de cycles d'horloge pendant lesquels les programmes attendent avant d'envoyer ou de recevoir un bit, assurant ainsi une synchronisation précise entre les deux parties.
-
----
-
-## Résultats et améliorations
 
 Voici a quoi ressemble notre fichier d'en-tête **```util.h```** :
 ```c
@@ -76,7 +90,11 @@ Voici a quoi ressemble notre fichier d'en-tête **```util.h```** :
 
 ```
 
-Et voici le résultat avec comme message à transmettre, le poème de Victor Hugo de son recueil *"Les Contemplations"*:
+---
+
+## Résultats et améliorations
+
+Voici un résultat avec comme message à transmettre, le poème de Victor Hugo de son recueil *"Les Contemplations"*:
 
 ```
 Message reçu: Demain, des l'aub%, a l'heure où blanchit la campagne,
@@ -97,12 +115,16 @@ Capacité réelle (T) : 4040.245589 bits/s
 0.7769 secondes entre start et end.
 ```
 
-Avec les paramètres actuels, nous avons obtenu des résultats impressionnants pour la transmission de données à travers le canal dissimulé. Le taux d'erreur est très faible, atteignant environ 0,01 % dans les meilleurs cas.
+Avec les paramètres actuels, nous obtenons des résultats satisfaisant pour la transmission de données à travers le canal dissimulé. Le taux d'erreur est très faible, atteignant moins de 0,1 % lorsque les programmes sont bien synchronisés.
 
-Cependant, il est toujours possible d'explorer différentes approches pour améliorer davantage les performances des programmes. Voici quelques suggestions pour continuer à optimiser les performances et réduire le taux d'erreur :
+Cependant, il est toujours possible d'explorer différentes approches pour améliorer encore les performances des programmes. Voici quelques suggestions pour continuer à optimiser les performances et réduire le taux d'erreur :
 
 1. Ajuster les paramètres dans **```util.h```** et expérimenter avec différentes valeurs pour trouver un équilibre optimal entre la vitesse de transmission et la fiabilité.
 2. Examiner et optimiser les fonctions de synchronisation, en ajoutant des délais supplémentaires si nécessaire pour assurer une synchronisation précise entre les deux parties.
-3. Exécuter les programmes avec la priorité la plus élevée possible pour minimiser les interférences avec d'autres processus et garantir une transmission de données fiable.
+3. Exécuter les programmes avec la priorité la plus élevée possible pour minimiser les interférences avec d'autres processus et garantir une transmission de données fiable (avec la commande nice du shell).
 
-En résumé, notre projet de transmission de données à travers un canal dissimulé a obtenu des résultats remarquables en termes de taux d'erreur et de vitesse d'exécution. Les ajustements apportés aux paramètres et aux fonctions de synchronisation ont joué un rôle crucial dans l'amélioration des performances des programmes. Il est essentiel de continuer à explorer différentes approches et d'ajuster les paramètres pour maintenir et améliorer encore les performances de ces programmes.
+En résumé, notre projet de transmission de données à travers un canal dissimulé a obtenu des résultats remarquables en termes de taux d'erreur et de vitesse d'exécution.
+
+Les ajustements apportés aux paramètres et aux fonctions de synchronisation ont joué un rôle crucial dans l'amélioration des performances des programmes.
+
+Il est essentiel de continuer à explorer différentes approches et d'ajuster les paramètres pour maintenir et améliorer encore les performances de ces programmes afin qu'il puisse supporter des messages beaucoup plus long avec une précision et une vitesse d'exécution tout aussi impressionante.
