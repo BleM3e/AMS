@@ -1,6 +1,5 @@
 /.vscode
 /delayloop_mesure
-/file
 /recv
 /recv_old.c
 /result.txt
