@@ -76,6 +76,27 @@ Voici a quoi ressemble notre fichier d'en-tête **```util.h```** :
 
 ```
 
+Et voici le résultat avec comme message à transmettre, le poème de Victor Hugo de son recueil *"Les Contemplations"*:
+
+```
+Message reçu: Demain, des l'aub%, a l'heure où blanchit la campagne,
+Je partirai. Vois-tu, je sais que tu m'attends.
+J'irai par la foret, j'irai par la montagne.
+Je ne puis demeurer loin de toi plus longtemps.
+
+Je marcherai les yeux fixes sur mes pensees,
+Sans rien voir au dehors, sans entendre aucun bruit,
+Seul, inconnu, le dos courbe, les mains croisees,
+Triste, et le jour pour moi sera comme la nuit.
+
+
+
+Taux d'erreur : 0.031726
+Débit : 4057.061436 bits/s
+Capacité réelle (T) : 4040.245589 bits/s
+0.7769 secondes entre start et end.
+```
+
 Avec les paramètres actuels, nous avons obtenu des résultats impressionnants pour la transmission de données à travers le canal dissimulé. Le taux d'erreur est très faible, atteignant environ 0,01 % dans les meilleurs cas.
 
 Cependant, il est toujours possible d'explorer différentes approches pour améliorer davantage les performances des programmes. Voici quelques suggestions pour continuer à optimiser les performances et réduire le taux d'erreur :
