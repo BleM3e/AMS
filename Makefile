@@ -1,15 +1,16 @@
+CC = gcc
+CFLAGS = -Wall -O2 -g
 LIBMASTIK = -I./Mastik/include -L./Mastik/lib -l:libmastik.a
-LIBMEM = -lrt
 
 all: send recv
 
-.PHONY : send recv
+.PHONY: send recv
 
-send:
-	gcc -g -O2 send.c -o send $(LIBMASTIK) $(LIBMEM)
+send: send.c
+	$(CC) $(CFLAGS) -o send send.c $(LIBMASTIK)
 
-recv:
-	gcc -g -O2 recv.c -o recv $(LIBMASTIK) $(LIBMEM)
+recv: recv.c
+	$(CC) $(CFLAGS) -o recv recv.c $(LIBMASTIK)
 
 clean:
-	rm send recv
+	rm -f send recv
