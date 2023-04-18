@@ -147,6 +147,7 @@ int main()
     double perc_error = calc_error(received_binary, message_binary, message_length * 8);
 
     printf("Message reçu: %s\n\n\nTaux d'erreur : %f\n", received_message, perc_error);
+    printf("Débit : %0f bit/sec\n", (double)message_length*8/elapsed);
     printf("%.4f secondes entre start et end.\n", elapsed);
 
     free(message_binary);
