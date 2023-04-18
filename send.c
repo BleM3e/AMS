@@ -70,8 +70,8 @@ int main(void)
 
         message_to_binary(file_content, binary_output, message_length);
 
-        char *cache_address;
-        cache_address = map_offset("file", 64);
+        void *cache_address;
+        cache_address = map_offset("file", 0);
         int i;
 
         // FILE *temp_file = fopen("temp_file.txt", "w");

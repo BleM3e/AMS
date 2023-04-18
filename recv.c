@@ -98,8 +98,8 @@ int main()
     int *received_binary = (int *)malloc(message_length * 8 * sizeof(int));
     int *received_timing = (int *)malloc(message_length * 8 * sizeof(int));
 
-    char *cache_address;
-    cache_address = map_offset("file", 64);
+    void *cache_address;
+    cache_address = map_offset("file", 0);
 
     uint32_t time_mesured;
     int i, somme, nb_val;
