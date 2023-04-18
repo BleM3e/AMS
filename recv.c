@@ -5,6 +5,7 @@
 #include <mastik/util.h>
 #include <string.h>
 #include <time.h>
+#include <math.h>
 
 #include "util.h"
 
@@ -82,9 +83,15 @@ void write_to_file(int *timing_input, int message_length)
     FILE *f = fopen("result.txt", "w");
     for (int i = 0; i < message_length; i++)
     {
-        fprintf(f,"%d\n",timing_input[i]);
+        fprintf(f, "%d\n", timing_input[i]);
     }
     fclose(f);
+}
+
+double calc_true_capacity(double C, double p)
+{
+    double true_capacity = C * (1 + ((1 - p) * log2(1 - p) + p * log2(p)));
+    return true_capacity;
 }
 
 int main()
@@ -136,8 +143,6 @@ int main()
     end = clock();
     elapsed = ((double)(end - start)) / CLOCKS_PER_SEC; /* Conversion en secondes  */
 
-    
-
     char *received_message = (char *)malloc(message_length + 1);
     binary_to_message(received_binary, received_message, message_length);
     write_to_file(received_timing, message_length * 8);
@@ -146,8 +151,13 @@ int main()
     message_to_binary(file_content, message_binary, message_length);
     double perc_error = calc_error(received_binary, message_binary, message_length * 8);
 
+    double C = (double)(message_length * 8) / elapsed;
+    double p = perc_error / 100;                       
+    double true_capacity = calc_true_capacity(C, p);
+
     printf("Message reçu: %s\n\n\nTaux d'erreur : %f\n", received_message, perc_error);
-    printf("Débit : %0f bit/sec\n", (double)message_length*8/elapsed);
+    printf("Débit : %f bits/s\n", C);
+    printf("Capacité réelle (T) : %f bits/s\n", true_capacity);
     printf("%.4f secondes entre start et end.\n", elapsed);
 
     free(message_binary);

@@ -8,14 +8,6 @@
 
 #include "util.h"
 
-void init_bits_to_send(int *bits, int size)
-{
-    for (int i = 0; i < size; i++)
-    {
-        bits[i] = i % 2;
-    }
-}
-
 void message_to_binary(const char *message, int *binary_output, int message_length)
 {
     for (int i = 0; i < message_length; i++)
