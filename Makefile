@@ -10,7 +10,7 @@ send: send.c
 	$(CC) $(CFLAGS) -o send send.c $(LIBMASTIK)
 
 recv: recv.c
-	$(CC) $(CFLAGS) -o recv recv.c $(LIBMASTIK)
+	$(CC) $(CFLAGS) -o recv recv.c -lm $(LIBMASTIK)
 
 clean:
 	rm -f send recv
